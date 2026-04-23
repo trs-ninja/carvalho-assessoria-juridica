@@ -1,460 +1,255 @@
-bash
-
-LOGO_B64=$(cat /home/claude/logo_b64.txt)
-# Now create the updated HTML with the logo embedded and corrected content
-cat > /home/claude/site_updated.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Carvalho Assessoria Jurídica</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --navy: #1a2a4a;
-      --gold: #b8962e;
-      --gold-light: #d4af5a;
-      --gold-pale: #f0e4c0;
-      --cream: #f5f0e8;
-      --cream-dark: #ede5d5;
-      --text-dark: #1a2a4a;
-      --text-mid: #3a4a6a;
-      --text-light: #7a8aaa;
-      --white: #ffffff;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--text-dark); overflow-x: hidden; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carvalho | Assessoria Jurídica</title>
 
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(26, 42, 74, 0.97); backdrop-filter: blur(8px);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 60px; height: 72px;
-      border-bottom: 1px solid rgba(184, 150, 46, 0.3);
-    }
-    .nav-brand { display: flex; align-items: center; gap: 14px; }
-    .nav-logo { height: 46px; width: 46px; object-fit: contain; }
-    .nav-brand-text { font-family: 'Playfair Display', serif; color: var(--gold-light); font-size: 1.05rem; letter-spacing: 0.05em; }
-    .nav-brand-text span { display: block; font-family: 'Lato', sans-serif; font-size: 0.62rem; color: rgba(255,255,255,0.45); letter-spacing: 0.2em; text-transform: uppercase; font-weight: 300; }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; transition: color 0.3s; }
-    .nav-links a:hover { color: var(--gold-light); }
-    .nav-cta { background: transparent; border: 1px solid var(--gold); color: var(--gold-light) !important; padding: 8px 20px; border-radius: 2px; transition: all 0.3s !important; }
-    .nav-cta:hover { background: var(--gold) !important; color: var(--navy) !important; }
+    <style>
+        :root {
+            --azul-escuro: #0f2846;
+            --dourado: #c19b54;
+            --verde-folha: #2d4b3b;
+            --fundo-creme: #f9f8f4;
+            --texto-cinza: #4a4a4a;
+        }
 
-    .hero { min-height: 100vh; background: var(--navy); position: relative; display: flex; align-items: center; overflow: hidden; }
-    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(184,150,46,0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 10% 80%, rgba(184,150,46,0.05) 0%, transparent 60%); }
-    .hero-circle { position: absolute; border-radius: 50%; border: 1px solid rgba(184,150,46,0.12); }
-    .hero-circle-1 { width: 600px; height: 600px; right: -100px; top: 50%; transform: translateY(-50%); }
-    .hero-circle-2 { width: 450px; height: 450px; right: 25px; top: 50%; transform: translateY(-50%); }
-    .hero-circle-3 { width: 300px; height: 300px; right: 150px; top: 50%; transform: translateY(-50%); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    .hero-logo-wrap {
-      position: absolute; right: 80px; top: 50%; transform: translateY(-50%);
-      z-index: 2; display: flex; align-items: center; justify-content: center;
-    }
-    .hero-logo-img { width: 340px; height: 340px; object-fit: contain; opacity: 0.22; filter: brightness(1.3) saturate(0.7); }
+        body {
+            background-color: var(--fundo-creme);
+            color: var(--texto-cinza);
+            line-height: 1.6;
+        }
 
-    .hero-content { position: relative; z-index: 2; padding: 120px 60px 80px; max-width: 620px; }
-    .hero-eyebrow { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
-    .hero-eyebrow-line { width: 40px; height: 1px; background: var(--gold); }
-    .hero-eyebrow span { font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-light); font-weight: 700; }
-    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 4.5vw, 3.5rem); color: var(--white); line-height: 1.18; margin-bottom: 24px; font-weight: 700; }
-    .hero h1 em { font-style: italic; color: var(--gold-light); }
-    .hero p { font-size: 1rem; line-height: 1.8; color: rgba(255,255,255,0.65); font-weight: 300; max-width: 480px; margin-bottom: 44px; }
-    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
-    .btn-primary { background: var(--gold); color: var(--navy); padding: 15px 34px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.3s; border: none; cursor: pointer; }
-    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
-    .btn-outline { border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); padding: 15px 34px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.3s; }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold-light); }
+        header {
+            background-color: var(--fundo-creme);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-    .gold-divider { height: 4px; background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy)); }
+        .logo-container img {
+            height: 80px;
+            width: auto;
+        }
 
-    section { padding: 100px 60px; }
-    .section-label { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-    .section-label-line { width: 36px; height: 1px; background: var(--gold); }
-    .section-label span { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
-    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 2.8rem); color: var(--navy); line-height: 1.2; margin-bottom: 20px; }
-    .section-title em { font-style: italic; color: var(--gold); }
-    .section-subtitle { font-size: 0.95rem; line-height: 1.8; color: var(--text-mid); font-weight: 300; max-width: 560px; }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
 
-    /* ABOUT */
-    .about { background: var(--white); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .about-visual { position: relative; }
-    .about-card { background: var(--navy); padding: 50px 44px; border-radius: 2px; position: relative; overflow: hidden; }
-    .about-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
-    .about-card-logo { display: flex; justify-content: center; margin-bottom: 28px; }
-    .about-card-logo img { width: 120px; height: 120px; object-fit: contain; }
-    .about-card p { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: rgba(255,255,255,0.85); line-height: 1.7; font-style: italic; text-align: center; }
-    .about-badge { position: absolute; bottom: -24px; right: -24px; width: 110px; height: 110px; background: var(--gold); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .about-badge strong { font-size: 1.5rem; color: var(--navy); font-weight: 700; line-height: 1; }
-    .about-badge span { font-size: 0.55rem; color: var(--navy); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; text-align: center; padding: 0 8px; }
-    .about-text .section-subtitle { max-width: 100%; margin-bottom: 32px; }
-    .about-highlight { background: var(--cream); border-left: 3px solid var(--gold); padding: 18px 22px; margin-top: 28px; }
-    .about-highlight p { font-size: 0.87rem; line-height: 1.7; color: var(--text-mid); font-style: italic; }
+        nav ul li a {
+            text-decoration: none;
+            color: var(--azul-escuro);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
 
-    /* SERVICES */
-    .services { background: var(--cream); }
-    .services-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; flex-wrap: wrap; gap: 24px; }
-    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--cream-dark); }
-    .service-card { background: var(--white); padding: 44px 36px; position: relative; transition: all 0.4s; overflow: hidden; cursor: default; }
-    .service-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
-    .service-card:hover { background: var(--navy); transform: translateY(-4px); z-index: 2; box-shadow: 0 20px 60px rgba(26,42,74,0.25); }
-    .service-card:hover::after { transform: scaleX(1); }
-    .service-icon { width: 52px; height: 52px; background: var(--gold-pale); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 28px; font-size: 1.4rem; transition: background 0.4s; }
-    .service-card:hover .service-icon { background: rgba(184,150,46,0.2); }
-    .service-card h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--navy); margin-bottom: 14px; transition: color 0.4s; }
-    .service-card:hover h3 { color: var(--gold-light); }
-    .service-card p { font-size: 0.88rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; transition: color 0.4s; }
-    .service-card:hover p { color: rgba(255,255,255,0.6); }
-    .service-arrow { margin-top: 28px; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); font-weight: 700; opacity: 0; transition: opacity 0.4s; }
-    .service-card:hover .service-arrow { opacity: 1; }
+        nav ul li a:hover {
+            color: var(--dourado);
+        }
 
-    /* DISCLAIMER */
-    .disclaimer { background: var(--navy); padding: 50px 60px; }
-    .disclaimer-inner { max-width: 800px; margin: 0 auto; text-align: center; }
-    .disclaimer-inner p { font-size: 0.85rem; line-height: 1.8; color: rgba(255,255,255,0.55); font-weight: 300; }
-    .disclaimer-inner strong { color: var(--gold-light); font-weight: 700; }
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            background-color: var(--azul-escuro);
+            color: var(--fundo-creme);
+        }
 
-    /* WHY */
-    .why { background: var(--cream); position: relative; overflow: hidden; }
-    .why .section-title { color: var(--navy); }
-    .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; margin-top: 60px; }
-    .why-item { display: flex; gap: 22px; align-items: flex-start; padding: 32px; background: var(--white); border-top: 3px solid var(--gold); transition: box-shadow 0.3s; }
-    .why-item:hover { box-shadow: 0 8px 40px rgba(26,42,74,0.1); }
-    .why-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); opacity: 0.4; line-height: 1; flex-shrink: 0; min-width: 40px; }
-    .why-text h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--navy); margin-bottom: 10px; }
-    .why-text p { font-size: 0.87rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--dourado);
+            font-family: 'Georgia', serif;
+        }
 
-    /* CONTACT */
-    .contact { background: var(--white); }
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 60px; }
-    .contact-item { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--cream-dark); }
-    .contact-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .contact-icon { width: 44px; height: 44px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-    .contact-item-text strong { display: block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 5px; }
-    .contact-item-text span { font-size: 0.95rem; color: var(--text-mid); font-weight: 300; }
-    .contact-item-text a { color: var(--text-mid); text-decoration: none; font-size: 0.95rem; font-weight: 300; }
-    .contact-item-text a:hover { color: var(--gold); }
-    .whatsapp-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: #fff; padding: 14px 28px; border-radius: 2px; text-decoration: none; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 32px; transition: background 0.3s; }
-    .whatsapp-btn:hover { background: #20b858; }
-    .whatsapp-btn svg { width: 20px; height: 20px; fill: #fff; }
-    .contact-note { background: var(--cream); padding: 32px; border-left: 3px solid var(--gold); }
-    .contact-note h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--navy); margin-bottom: 12px; }
-    .contact-note p { font-size: 0.88rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+        }
 
-    /* FOOTER */
-    footer { background: var(--navy); padding: 60px 60px 36px; border-top: 1px solid rgba(184,150,46,0.2); }
-    .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 60px; margin-bottom: 48px; }
-    .footer-logo-area { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
-    .footer-logo-area img { width: 52px; height: 52px; object-fit: contain; }
-    .footer-brand { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--gold-light); }
-    .footer-brand span { display: block; font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
-    .footer-desc { font-size: 0.85rem; line-height: 1.75; color: rgba(255,255,255,0.4); font-weight: 300; }
-    .footer-col h4 { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 20px; }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 10px; }
-    .footer-col ul li a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.85rem; font-weight: 300; transition: color 0.3s; }
-    .footer-col ul li a:hover { color: var(--gold-light); }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-    .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.25); font-weight: 300; }
+        .btn {
+            display: inline-block;
+            background-color: var(--dourado);
+            color: var(--azul-escuro);
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+        }
 
-    /* ANIMATIONS */
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    .hero-content > * { animation: fadeUp 0.8s ease both; }
-    .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
-    .hero-content > *:nth-child(2) { animation-delay: 0.25s; }
-    .hero-content > *:nth-child(3) { animation-delay: 0.4s; }
-    .hero-content > *:nth-child(4) { animation-delay: 0.55s; }
+        .btn:hover {
+            background-color: #a88545;
+            color: white;
+        }
 
-    @media (max-width: 900px) {
-      nav { padding: 0 24px; }
-      .nav-links { display: none; }
-      section { padding: 70px 24px; }
-      .about, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-      .services-grid { grid-template-columns: 1fr; }
-      .why-grid { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr; gap: 36px; }
-      .hero-content { padding: 110px 24px 60px; }
-      .hero-logo-wrap { display: none; }
-      .hero-circle { display: none; }
-      .services-header { flex-direction: column; align-items: flex-start; }
-      footer { padding: 50px 24px 28px; }
-      .disclaimer { padding: 40px 24px; }
-    }
-  </style>
+        section {
+            padding: 80px 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--azul-escuro);
+            margin-bottom: 50px;
+            font-family: 'Georgia', serif;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            border-top: 4px solid var(--dourado);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .service-card h3 {
+            color: var(--azul-escuro);
+            margin-bottom: 15px;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .contact-info {
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        footer {
+            background-color: var(--azul-escuro);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.9rem;
+        }
+
+        .disclaimer {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav>
-  <div class="nav-brand">
-    <img class="nav-logo" src="LOGO_PLACEHOLDER" alt="Logo Carvalho"/>
-    <div class="nav-brand-text">
-      Carvalho
-      <span>Assessoria Jurídica</span>
+<header>
+    <div class="logo-container">
+        <img src="images/logo.jpg" alt="Logo Carvalho Assessoria Jurídica">
     </div>
-  </div>
-  <ul class="nav-links">
-    <li><a href="#sobre">Sobre</a></li>
-    <li><a href="#servicos">Serviços</a></li>
-    <li><a href="#diferenciais">Diferenciais</a></li>
-    <li><a href="#contato" class="nav-cta">Falar Conosco</a></li>
-  </ul>
-</nav>
+    <nav>
+        <ul>
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#sobre">Sobre Nós</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#contato">Contato</a></li>
+        </ul>
+    </nav>
+</header>
 
-<!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="hero-bg"></div>
-  <div class="hero-circle hero-circle-1"></div>
-  <div class="hero-circle hero-circle-2"></div>
-  <div class="hero-circle hero-circle-3"></div>
-  <div class="hero-logo-wrap">
-    <img class="hero-logo-img" src="LOGO_PLACEHOLDER" alt="Logo Carvalho"/>
-  </div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">
-      <div class="hero-eyebrow-line"></div>
-      <span>São Paulo · Região do ABC</span>
-    </div>
-    <h1>Orientação jurídica <em>clara</em>, séria e acessível</h1>
-    <p>Somos estudantes de Direito comprometidos em oferecer consultoria e apoio jurídico de qualidade, ajudando pessoas físicas e empresas a entender seus direitos e navegar com segurança por questões legais.</p>
-    <div class="hero-buttons">
-      <a href="#contato" class="btn-primary">Entre em Contato</a>
-      <a href="#servicos" class="btn-outline">O que Fazemos</a>
-    </div>
-  </div>
+<section id="inicio" class="hero">
+    <h1>Orientação Jurídica Clara e Acessível</h1>
+    <p>Apoio técnico para a sua rotina legal. Analisamos contratos e oferecemos direcionamento para decisões com segurança.</p>
+    <a href="#contato" class="btn">Fale Conosco</a>
 </section>
 
-<div class="gold-divider"></div>
-
-<!-- SOBRE -->
-<section class="about" id="sobre">
-  <div class="about-visual">
-    <div class="about-card">
-      <div class="about-card-logo">
-        <img src="LOGO_PLACEHOLDER" alt="Carvalho Assessoria"/>
-      </div>
-      <p>Conhecimento jurídico com compromisso e seriedade, colocados a serviço de quem precisa.</p>
+<section id="sobre">
+    <h2 class="section-title">Quem Somos</h2>
+    <div class="about-content">
+        <p><strong>Carvalho Assessoria Jurídica</strong> atua com análise preventiva e organização documental.</p>
+        <br>
+        <p>Ajudamos pessoas e pequenos negócios a entender contratos, direitos e evitar problemas jurídicos.</p>
     </div>
-    <div class="about-badge">
-      <strong>ABC</strong>
-      <span>Região Atendida</span>
-    </div>
-  </div>
-  <div class="about-text">
-    <div class="section-label">
-      <div class="section-label-line"></div>
-      <span>Quem Somos</span>
-    </div>
-    <h2 class="section-title">Estudantes de Direito,<br><em>atendimento dedicado</em></h2>
-    <p class="section-subtitle">A Carvalho Assessoria Jurídica é formada por estudantes de Direito com experiência prática, prontos para orientar e apoiar pessoas físicas e empresas em São Paulo e na Região do ABC — Santo André, São Bernardo do Campo e São Caetano do Sul.</p>
-    <div class="about-highlight">
-      <p>Oferecemos consultoria jurídica e apoio na compreensão de direitos, análise de documentos e orientação em situações cotidianas que envolvem o Direito — sempre com responsabilidade, ética e transparência.</p>
-    </div>
-  </div>
 </section>
 
-<!-- SERVIÇOS -->
-<section class="services" id="servicos">
-  <div class="services-header">
-    <div>
-      <div class="section-label">
-        <div class="section-label-line"></div>
-        <span>O que Fazemos</span>
-      </div>
-      <h2 class="section-title">Nossos <em>Serviços</em></h2>
-    </div>
-    <p style="max-width:340px; font-size:0.88rem; color:var(--text-light); font-weight:300; line-height:1.7;">
-      Orientação e suporte jurídico para auxiliar você a tomar decisões mais seguras e informadas.
-    </p>
-  </div>
-  <div class="services-grid">
-    <div class="service-card">
-      <div class="service-icon">📄</div>
-      <h3>Análise de Contratos</h3>
-      <p>Revisão e orientação sobre contratos de aluguel, prestação de serviços, compra e venda, e outros documentos jurídicos do dia a dia.</p>
-      <div class="service-arrow">Saiba mais →</div>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">⚖️</div>
-      <h3>Orientação em Direitos</h3>
-      <p>Esclarecimento sobre seus direitos como consumidor, trabalhador, locatário ou proprietário, com linguagem acessível e objetiva.</p>
-      <div class="service-arrow">Saiba mais →</div>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🏢</div>
-      <h3>Apoio Empresarial</h3>
-      <p>Consultoria para pequenos negócios e MEIs: dúvidas sobre contratos, relações com fornecedores e clientes, e documentação básica.</p>
-      <div class="service-arrow">Saiba mais →</div>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🏠</div>
-      <h3>Questões Imobiliárias</h3>
-      <p>Orientação sobre contratos de locação, revisão de cláusulas, notificações e esclarecimento de direitos em relações locatícias.</p>
-      <div class="service-arrow">Saiba mais →</div>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">👨‍👩‍👧</div>
-      <h3>Direito de Família</h3>
-      <p>Apoio informativo em questões de guarda, pensão alimentícia, divórcio e inventário — com orientação sobre os próximos passos legais.</p>
-      <div class="service-arrow">Saiba mais →</div>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🛡️</div>
-      <h3>Consultoria Preventiva</h3>
-      <p>Identificação prévia de riscos jurídicos em situações do cotidiano, ajudando você a agir antes que problemas se tornem litígios.</p>
-      <div class="service-arrow">Saiba mais →</div>
-    </div>
-  </div>
-</section>
-
-<!-- DISCLAIMER -->
-<div class="disclaimer">
-  <div class="disclaimer-inner">
-    <p><strong>Nota importante:</strong> A Carvalho Assessoria Jurídica é composta por estudantes de Direito e não realiza representação judicial nem advocacia. Nossos serviços consistem em <strong>consultoria, orientação e apoio informativo</strong>. Para demandas judiciais, indicamos profissionais habilitados pela OAB.</p>
-  </div>
-</div>
-
-<!-- DIFERENCIAIS -->
-<section class="why" id="diferenciais">
-  <div class="section-label">
-    <div class="section-label-line"></div>
-    <span>Por que nos escolher</span>
-  </div>
-  <h2 class="section-title">Nossos <em>Diferenciais</em></h2>
-  <p class="section-subtitle">Unimos embasamento acadêmico sólido com um atendimento próximo e sem burocracia.</p>
-  <div class="why-grid">
-    <div class="why-item">
-      <div class="why-num">01</div>
-      <div class="why-text">
-        <h4>Linguagem Acessível</h4>
-        <p>Traduzimos o juridiquês para o português de todo dia. Você sai da consulta entendendo exatamente sua situação.</p>
-      </div>
-    </div>
-    <div class="why-item">
-      <div class="why-num">02</div>
-      <div class="why-text">
-        <h4>Atendimento Próximo</h4>
-        <p>Sem formalidades desnecessárias. Você fala diretamente com quem vai cuidar do seu caso, com atenção individualizada.</p>
-      </div>
-    </div>
-    <div class="why-item">
-      <div class="why-num">03</div>
-      <div class="why-text">
-        <h4>Base Acadêmica Sólida</h4>
-        <p>Embasamento teórico atualizado, com acesso às mais recentes discussões do Direito, aplicado à sua realidade.</p>
-      </div>
-    </div>
-    <div class="why-item">
-      <div class="why-num">04</div>
-      <div class="why-text">
-        <h4>Presença no ABC</h4>
-        <p>Atuação consolidada em São Paulo e na Região do ABC, com conhecimento das particularidades locais para melhor orientá-lo.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTATO -->
-<section class="contact" id="contato">
-  <div class="section-label">
-    <div class="section-label-line"></div>
-    <span>Entre em Contato</span>
-  </div>
-  <h2 class="section-title">Fale com a<br><em>nossa equipe</em></h2>
-  <p class="section-subtitle">Tire suas dúvidas sem compromisso. Atendemos em São Paulo e na Região do ABC.</p>
-
-  <div class="contact-grid">
-    <div>
-      <div class="contact-item">
-        <div class="contact-icon">📞</div>
-        <div class="contact-item-text">
-          <strong>WhatsApp</strong>
-          <a href="https://wa.me/5511999990000">(11) 99999-0000</a>
+<section id="servicos" style="background-color: #f0eee8;">
+    <h2 class="section-title">Serviços</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <h3>Análise de Contratos</h3>
+            <p>Revisão de contratos e identificação de riscos.</p>
         </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon">✉️</div>
-        <div class="contact-item-text">
-          <strong>E-mail</strong>
-          <a href="mailto:contato@carvalhoassessoria.com.br">contato@carvalhoassessoria.com.br</a>
+
+        <div class="service-card">
+            <h3>Documentos</h3>
+            <p>Elaboração de acordos, termos e notificações.</p>
         </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon">📍</div>
-        <div class="contact-item-text">
-          <strong>Localização</strong>
-          <span>São Paulo – SP<br>Atendimento em toda a Região do ABC</span>
+
+        <div class="service-card">
+            <h3>Orientação</h3>
+            <p>Dúvidas legais do dia a dia e prevenção de problemas.</p>
         </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon">🕐</div>
-        <div class="contact-item-text">
-          <strong>Horário</strong>
-          <span>Seg – Sex: 9h às 18h<br>Sáb: 9h às 13h</span>
-        </div>
-      </div>
-      <a href="https://wa.me/5511999990000" class="whatsapp-btn">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Chamar no WhatsApp
-      </a>
     </div>
-    <div class="contact-note">
-      <h4>Como funciona a consulta?</h4>
-      <p>Entre em contato pelo WhatsApp ou e-mail descrevendo brevemente sua situação. Nossa equipe entrará em contato para agendar uma conversa e entender melhor como podemos ajudar.</p>
-      <br>
-      <p>Atendemos pessoalmente em São Paulo e na Região do ABC, e também realizamos consultorias remotas por videoconferência para sua comodidade.</p>
-    </div>
-  </div>
 </section>
 
-<!-- FOOTER -->
+<section id="contato">
+    <h2 class="section-title">Contato</h2>
+    <div class="contact-info">
+        <p>Fale com a gente:</p>
+        <br>
+        <p><strong>WhatsApp:</strong> (11) 99999-0000</p>
+        <p><strong>Email:</strong> contato@carvalhoassessoria.com.br</p>
+        <br>
+        <a href="mailto:contato@carvalhoassessoria.com.br" class="btn">Enviar Email</a>
+    </div>
+</section>
+
 <footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-logo-area">
-        <img src="LOGO_PLACEHOLDER" alt="Logo Carvalho"/>
-        <div class="footer-brand">
-          Carvalho
-          <span>Assessoria Jurídica</span>
-        </div>
-      </div>
-      <p class="footer-desc">Consultoria e orientação jurídica em São Paulo e Região do ABC, prestada por estudantes de Direito comprometidos e dedicados.</p>
+    <p>&copy; 2026 Carvalho Assessoria Jurídica</p>
+    <div class="disclaimer">
+        Atuação preventiva e extrajudicial. Casos judiciais são direcionados a advogados.
     </div>
-    <div class="footer-col">
-      <h4>Serviços</h4>
-      <ul>
-        <li><a href="#servicos">Análise de Contratos</a></li>
-        <li><a href="#servicos">Orientação em Direitos</a></li>
-        <li><a href="#servicos">Apoio Empresarial</a></li>
-        <li><a href="#servicos">Questões Imobiliárias</a></li>
-        <li><a href="#servicos">Direito de Família</a></li>
-        <li><a href="#servicos">Consultoria Preventiva</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Contato</h4>
-      <ul>
-        <li><a href="https://wa.me/5511999990000">(11) 99999-0000</a></li>
-        <li><a href="mailto:contato@carvalhoassessoria.com.br">contato@carvalhoassessoria.com.br</a></li>
-        <li><a href="#">São Paulo – SP</a></li>
-        <li><a href="#">Região do ABC</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2025 Carvalho Assessoria Jurídica. Todos os direitos reservados.</p>
-    <p style="font-size:0.7rem; color:rgba(255,255,255,0.2);">Serviços prestados por estudantes de Direito — não advocacia.</p>
-  </div>
 </footer>
 
 </body>
 </html>
-HTMLEOF
-echo "Done"
-Saída
-
-Done
